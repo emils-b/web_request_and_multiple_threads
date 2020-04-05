@@ -20,6 +20,7 @@ public class WebReader {
 		return doc;
 	}
 	
+	
 	//gribēju, ka pēc id sākuma atlasa "id_" bet neizdomāju kā
 	static void getTableTrTag(String urlString) {
 		Document doc = getPage(urlString);

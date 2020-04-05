@@ -14,6 +14,7 @@ public class Car {
 	String hrefToCarPage;
 	static ArrayList<Car> cars = new ArrayList<Car>();
 	int nrOfVisits;
+	String transmition; //Manual/automat ID tdo_35
 
 	public Car(String year, String engineType, String mileage, String price, String href) {
 		this.year = Integer.parseInt(year);
@@ -24,6 +25,7 @@ public class Car {
 		this.hrefToCarPage = "https://www.ss.com"+href; //jāuzliek ss.com sākums citur kā konstante
 		//this.nrOfVisits = getVisitCount(this.hrefToCarPage);
 		//getVisitCount(this.hrefToCarPage);
+		this.transmition = getTransmitionTypeFromUrl(this.hrefToCarPage);
 		//printCar();
 		
 	}
@@ -66,6 +68,29 @@ public class Car {
 	
 	void printCar() {
 		System.out.println(this.year+" "+this.usedFuelType+" "+this.engineCap+" "+this.mileage+" "+this.price);
+	}
+	
+	static String getTransmitionTypeFromUrl(String urlString) {
+	Document doc = WebReader.getPage(urlString);
+	Element transmitionTypeFromPage = doc.getElementById("tdo_35");
+	String transmition = transmitionTypeFromPage.text();
+	String preciseTransmitionType = getPreciseTransmitionType(transmition);
+	return preciseTransmitionType;
+	}
+	
+	static String getPreciseTransmitionType(String transmition) {
+		String preciseTransmitionType = "";
+		String[] webTrSplit = transmition.split(" ");
+		if (webTrSplit[0].equals("Manuāla")) {
+			preciseTransmitionType = "Manual";
+		}
+		else if (webTrSplit[0].equals("Automāts")) {
+			preciseTransmitionType = "Automatic";
+		}
+		else {
+			preciseTransmitionType = "No information or non standart type.";
+		}
+		return preciseTransmitionType;
 	}
 	
 	//šis nestrādā, iegūst 1 visiem
