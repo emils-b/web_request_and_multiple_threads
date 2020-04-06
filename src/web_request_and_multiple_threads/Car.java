@@ -1,9 +1,13 @@
 package web_request_and_multiple_threads;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 public class Car {
 	int year;
@@ -14,7 +18,7 @@ public class Car {
 	String hrefToCarPage;
 	static ArrayList<Car> cars = new ArrayList<Car>();
 	int nrOfVisits;
-	String transmition; //Manual/automat ID tdo_35
+	String transmition;
 
 	public Car(String year, String engineType, String mileage, String price, String href) {
 		this.year = Integer.parseInt(year);
@@ -24,9 +28,9 @@ public class Car {
 		this.price = getPrice(price);
 		this.hrefToCarPage = "https://www.ss.com"+href; //jāuzliek ss.com sākums citur kā konstante
 		//this.nrOfVisits = getVisitCount(this.hrefToCarPage);
-		//getVisitCount(this.hrefToCarPage);
+		getVisitCount(this.hrefToCarPage);
 		this.transmition = getTransmitionTypeFromUrl(this.hrefToCarPage);
-		//printCar();
+		printCar();
 		
 	}
 	
@@ -94,11 +98,25 @@ public class Car {
 	}
 	
 	//šis nestrādā, iegūst 1 visiem
-	/*static void getVisitCount(String urlString) {
-		Document doc = WebReader.getPage(urlString);
-		Element nrOfVisit = doc.getElementById("show_cnt_stat");
-		int nr = Integer.parseInt(nrOfVisit.text());
+	static void getVisitCount(String urlString) {
+		//Document doc = WebReader.getPage(urlString);
+		//Element nrOfVisit = doc.getElementById("show_cnt_stat");
+		//int nr = Integer.parseInt(nrOfVisit.text());
+		WebDriver driver;
+		driver=new ChromeDriver();
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+		driver.navigate().to(urlString);
+		driver.navigate().refresh();
+		String visitCount = driver.findElement(By.id("show_cnt_stat")).getText();
+		System.out.println(visitCount);
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		driver.quit();
 		//System.out.println(nr);
-	}*/
+	}
 
 }
