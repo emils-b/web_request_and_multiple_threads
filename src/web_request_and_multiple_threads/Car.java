@@ -6,8 +6,11 @@ import java.util.concurrent.TimeUnit;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 
 public class Car {
 	int year;
@@ -104,9 +107,32 @@ public class Car {
 		//int nr = Integer.parseInt(nrOfVisit.text());
 		WebDriver driver;
 		driver=new ChromeDriver();
-		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+		long start = System.currentTimeMillis();
 		driver.navigate().to(urlString);
-		driver.navigate().refresh();
+		//Actions builder = new Actions(driver);
+		//Actions stopLoading;
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		System.out.println("before first stoper___________________________");
+		long end = System.currentTimeMillis();
+		//if (end-start > 2000) {
+			System.out.println("first stopper Test>>>>>>>>>>>>>>>>>.");
+			js.executeScript("return window.stop");//stopLoading = builder.sendKeys(Keys.ESCAPE);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		//}
+		System.out.println("before refreshed_____________________________");
+		//driver.navigate().refresh();
+		System.out.println("after refreshed_____________________________");
+		long end2 = System.currentTimeMillis();
+		//if (end2-start > 2000) {
+			System.out.println("second stoper Test<<<<<<<<<<<<<<<<<<<,");
+			//js.executeScript("return window.stop");//stopLoading = builder.sendKeys(Keys.ESCAPE);
+		//}
 		String visitCount = driver.findElement(By.id("show_cnt_stat")).getText();
 		System.out.println(visitCount);
 		try {
@@ -118,5 +144,8 @@ public class Car {
 		driver.quit();
 		//System.out.println(nr);
 	}
+	
+	/*JavascriptExecutor js = (JavascriptExecutor) driver;
+	js.executeScript("return window.stop");*/
 
 }
